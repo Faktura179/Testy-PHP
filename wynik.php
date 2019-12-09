@@ -64,7 +64,7 @@ h1{
 
         <!-- Navigation -->
  <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
-    <a class="navbar-brand" href="#">Testujsie.pl</a>
+    <a class="navbar-brand" href="index.php">Testujsie.pl</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
     </button>
@@ -92,14 +92,16 @@ h1{
             if(isset($_POST[$i])){
                 $query = $mysqli->query("SELECT * FROM pytania WHERE ID='".$_POST[$i]."'");
                 $row = $query->fetch_assoc();
-                echo(createAnswer($row["pytanie"],$row["A"],$row["B"],$row["C"],$row["D"],$row["dobra"],$i,$_POST[$i."odp"]));
-                if($row["dobra"]==$_POST[$i."odp"]){
-                    $wynik++;
-                    $query = $mysqli->query("UPDATE pytania SET poprawne=poprawne+1 WHERE ID=".$row["ID"]);
-                    $query = $mysqli->query("UPDATE users SET poprawne=poprawne+1 WHERE username='".$_SESSION["user"]."'");
-                }else{
-                    $query = $mysqli->query("UPDATE pytania SET niepoprawne=niepoprawne+1 WHERE ID=".$row["ID"]);
-                    $query = $mysqli->query("UPDATE users SET niepoprawne=niepoprawne+1 WHERE username='".$_SESSION["user"]."'");
+                echo(createAnswer($row["pytanie"],$row["A"],$row["B"],$row["C"],$row["D"],$row["dobra"],$i,(isset($_POST[$i."odp"])?$_POST[$i."odp"]:null)));
+                if(isset($_POST[$i."odp"])){
+                    if($row["dobra"]==$_POST[$i."odp"]){
+                        $wynik++;
+                        $query = $mysqli->query("UPDATE pytania SET poprawne=poprawne+1 WHERE ID=".$row["ID"]);
+                        $query = $mysqli->query("UPDATE users SET poprawne=poprawne+1 WHERE username='".$_SESSION["user"]."'");
+                    }else{
+                        $query = $mysqli->query("UPDATE pytania SET niepoprawne=niepoprawne+1 WHERE ID=".$row["ID"]);
+                        $query = $mysqli->query("UPDATE users SET niepoprawne=niepoprawne+1 WHERE username='".$_SESSION["user"]."'");
+                    }
                 }
             }
         }

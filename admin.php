@@ -47,6 +47,9 @@ h1{
 .uname{
   margin-bottom:10px;
 }
+#formAdd{
+  padding:20px;
+}
     </style>
 </head>
 <body>
@@ -76,14 +79,14 @@ h1{
           $item .= "</ul>";          
           $item .= "</div>";
           $item .= "<div class='odp'><div class='popr'>Poprawne odpowiedzi: ".$popr."</div><div class='niepopr'>Niepoprawne odpowiedzi: ".$niepopr."</div></div>";
-          $item .= "<div class=''><a href='edit.php?ID=".$ID."' class='btn btn-primary xd'>Edytuj</a><a href='delete.php?item=question&ID=".$ID."' class='btn btn-primary xd'>Usuń</a></div>";
+          $item .= "<div class=''><a href='admin.php?nav=editQue&ID=".$ID."' class='btn btn-primary xd'>Edytuj</a><a href='delete.php?item=question&ID=".$ID."' class='btn btn-primary xd'>Usuń</a></div>";
           $item .= "<hr/>";
           return $item;
         }
     ?>
     <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
-    <a class="navbar-brand" href="#">Testujsie.pl</a>
+    <a class="navbar-brand" href="admin.php">Testujsie.pl</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
     </button>
@@ -191,10 +194,112 @@ h1{
           break;
           case "addQue":
             ?>
-              <form action="addQuestion.php" method="post">
-                
+            <h1>Dodaj pytanie</h1>
+              <form action="addQuestion.php" method="post" id="formAdd">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" >Pytanie</span>
+                  </div>
+                  <input type="text" name="pytanie" class="form-control">
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" >A</span>
+                  </div>
+                  <input type="text" name="A" class="form-control">
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" >B</span>
+                  </div>
+                  <input type="text" name="B" class="form-control">
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" >C</span>
+                  </div>
+                  <input type="text" name="C" class="form-control">
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" >D</span>
+                  </div>
+                  <input type="text" name="D" class="form-control">
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Dobra odpowiedź</span>
+                  </div>  
+                  <select class="custom-select" name="dobre">
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                  <select>
+                </div>
+                <input type="submit" value="Dodaj" class="btn btn-primary">
               </form>
             <?php
+          break;
+          case "editQue":
+            $mysqli = @new mysqli("localhost", "root", "", "stadnik");
+            if ($mysqli->connect_errno) {
+                echo("Nie udało się zalogować");
+            }else{
+              $mysqli->set_charset('utf8');
+              $query = $mysqli->query("SELECT * FROM pytania WHERE ID='".$_GET["ID"]."'");
+              while($row = $query->fetch_assoc()){
+            ?>
+            <h1>Edytuj pytanie</h1>
+              <form action="edit.php" method="post" id="formAdd">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" >Pytanie</span>
+                  </div>
+                  <input type="text" name="pytanie" class="form-control" value="<?php echo(htmlspecialchars($row["pytanie"])); ?>">
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" >A</span>
+                  </div>
+                  <input type="text" name="A" class="form-control" value="<?php echo(htmlspecialchars($row["A"])); ?>">
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" >B</span>
+                  </div>
+                  <input type="text" name="B" class="form-control" value="<?php echo(htmlspecialchars($row["B"])); ?>">
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" >C</span>
+                  </div>
+                  <input type="text" name="C" class="form-control" value="<?php echo(htmlspecialchars($row["C"])); ?>">
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" >D</span>
+                  </div>
+                  <input type="text" name="D" class="form-control" value="<?php echo(htmlspecialchars($row["D"])); ?>">
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Dobra odpowiedź</span>
+                  </div>  
+                  <select class="custom-select" name="dobre">
+                    <option value="A" <?php echo($row["dobra"]=="A"?"selected":null); ?>>A</option>
+                    <option value="B" <?php echo($row["dobra"]=="B"?"selected":null); ?>>B</option>
+                    <option value="C" <?php echo($row["dobra"]=="C"?"selected":null); ?>>C</option>
+                    <option value="D" <?php echo($row["dobra"]=="D"?"selected":null); ?>>D</option>
+                  <select>
+                </div>
+                <input type="submit" value="Zaktualizuj" class="btn btn-primary">
+                <input type="hidden" value="<?php echo($row["ID"]); ?>" name="ID">
+              </form>
+            <?php
+            }
+            $mysqli->close();
+            }
           break;
         }
         ?>

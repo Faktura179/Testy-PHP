@@ -176,7 +176,7 @@ body {
                             $stmt->execute();
                             $result = $stmt->get_result();
                             if($result->num_rows === 0){
-                                $stmt = $mysqli->prepare("INSERT INTO users VALUES(?, ?, ?)");
+                                $stmt = $mysqli->prepare("INSERT INTO users VALUES(?, ?, ?,0,0)");
                                 $hashed = password_hash($_POST['password'], PASSWORD_BCRYPT, ['cost' => 6,]);
                                 $admin =0;
                                 $stmt->bind_param("ssi", $_POST['username'], $hashed,$admin);

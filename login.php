@@ -186,6 +186,16 @@ body {
                             $result = $stmt->get_result();
                             if($result->num_rows === 0){
                                 echo("Użytkownik nie istnieje");
+                                if(strlen($_POST['username'])>5 && strlen($_POST['password'])){
+                                  $stmt = $mysqli->prepare("INSERT INTO users VALUES(?, ?, ?,0,0)");
+                                  $hashed = password_hash($_POST['password'], PASSWORD_BCRYPT, ['cost' => 6,]);
+                                  $admin =0;
+                                  $stmt->bind_param("ssi", $_POST['username'], $hashed,$admin);
+                                  $stmt->execute();
+                                  $_SESSION["user"] = $_POST['username'];
+                                  $_SESSION["admin"] = 0;
+                                  header("Location: index.php");
+                                }
                             }else{
                                 $username;
                                 $password;

@@ -1,2 +1,2 @@
-# stadnik
-projekt do stadnika php testy
+# Porjekt testy w PHP
+projekt php testy
